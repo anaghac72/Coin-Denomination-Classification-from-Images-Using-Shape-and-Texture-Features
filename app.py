@@ -20,20 +20,61 @@ st.set_page_config(
 
 
 # =========================================================
+# CUSTOM CSS
+# =========================================================
+
+st.markdown("""
+<style>
+
+.title {
+    text-align: center;
+    font-size: 50px;
+    font-weight: bold;
+    color: #111111;
+}
+
+.subtitle {
+    text-align: center;
+    font-size: 18px;
+    color: gray;
+    margin-bottom: 30px;
+}
+
+.result-box {
+    background-color: #f5f7fa;
+    padding: 25px;
+    border-radius: 15px;
+    text-align: center;
+    margin-top: 20px;
+    box-shadow: 0px 4px 10px rgba(0,0,0,0.08);
+}
+
+.result {
+    font-size: 42px;
+    font-weight: bold;
+    color: #00875a;
+}
+
+</style>
+""", unsafe_allow_html=True)
+
+
+# =========================================================
 # LOAD MODEL
 # =========================================================
 
 @st.cache_resource
 def load_models():
 
-    model = joblib.load("rf_model.pkl")
+    model = joblib.load("models/rf_model.pkl")
 
-    scaler = joblib.load("scaler.pkl")
+    scaler = joblib.load("models/scaler.pkl")
 
     return model, scaler
 
 
 try:
+
     model, scaler = load_models()
 
 except Exception as e:
@@ -49,15 +90,22 @@ except Exception as e:
 
 def extract_features(image):
 
+    # PIL -> NumPy
     image = np.array(image)
 
-    image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
-
+    # Resize image
     image = cv2.resize(image, (256, 256))
 
+    # RGB -> BGR
+    image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
+
+    # Gray image
     gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
 
-    # Detect coin circle
+    # =====================================================
+    # CIRCLE DETECTION
+    # =====================================================
+
     circles = cv2.HoughCircles(
         gray,
         cv2.HOUGH_GRADIENT,
@@ -70,6 +118,8 @@ def extract_features(image):
     )
 
     radius = 0
+
+    segmented = gray
 
     if circles is not None:
 
@@ -85,17 +135,14 @@ def extract_features(image):
 
         segmented = cv2.bitwise_and(gray, gray, mask=mask)
 
-    else:
-        segmented = gray
-
     # =====================================================
-    # Diameter Ratio
+    # DIAMETER RATIO
     # =====================================================
 
     diameter_ratio = radius / 128.0
 
     # =====================================================
-    # Edge Density
+    # EDGE DENSITY
     # =====================================================
 
     edges = cv2.Canny(segmented, 100, 200)
@@ -140,6 +187,7 @@ def extract_features(image):
         feature_vector=True
     )
 
+    # MUST MATCH TRAINING
     hog_features = hog_features[:200]
 
     # =====================================================
@@ -174,13 +222,17 @@ def extract_features(image):
 
 
 # =========================================================
-# STREAMLIT UI
+# UI
 # =========================================================
 
-st.title("🪙 Indian Coin Denomination Prediction")
+st.markdown(
+    '<p class="title">🪙 Indian Coin Prediction</p>',
+    unsafe_allow_html=True
+)
 
-st.write(
-    "Upload an Indian coin image to predict the denomination."
+st.markdown(
+    '<p class="subtitle">Upload an Indian coin image to predict denomination</p>',
+    unsafe_allow_html=True
 )
 
 uploaded_file = st.file_uploader(
@@ -188,29 +240,60 @@ uploaded_file = st.file_uploader(
     type=["jpg", "jpeg", "png"]
 )
 
+# =========================================================
+# PREDICTION
+# =========================================================
+
 if uploaded_file is not None:
 
     try:
 
         image = Image.open(uploaded_file).convert("RGB")
 
-        st.image(
-            image,
-            caption="Uploaded Coin",
-            use_container_width=True
-        )
+        col1, col2 = st.columns(2)
+
+        with col1:
+
+            st.image(
+                image,
+                caption="Uploaded Coin",
+                use_container_width=True
+            )
 
         with st.spinner("Predicting..."):
 
+            # Extract features
             features = extract_features(image)
 
+            # Scale
             features = scaler.transform([features])
 
+            # Predict
             prediction = model.predict(features)[0]
 
-        st.success(
-            f"Predicted Coin Denomination: ₹{prediction}"
-        )
+            # Confidence
+            if hasattr(model, "predict_proba"):
+
+                confidence = np.max(
+                    model.predict_proba(features)
+                ) * 100
+
+            else:
+
+                confidence = 0
+
+        with col2:
+
+            st.markdown(
+                f"""
+                <div class="result-box">
+                    <div class="result">₹{prediction}</div>
+                    <br>
+                    <b>Confidence:</b> {confidence:.2f}%
+                </div>
+                """,
+                unsafe_allow_html=True
+            )
 
     except Exception as e:
 

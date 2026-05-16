@@ -45,9 +45,9 @@ The project avoids deep learning entirely and demonstrates how classical compute
 
 # 👨‍💻 Team Members
 
-| Name | Course | Register Number |
+| Name | Course | Register Number|
 |---|---|---|
-| Angel George | BioAI | 253203 |
+| Angel George | BioAI | 253203 
 | Vishnumaya | CSDA | 253013 |
 | Anagha C | DACS | 253126 |
 
@@ -210,6 +210,22 @@ Upload any Indian coin image (`JPG`, `PNG`) and get instant denomination predict
 - Scikit-Image
 - PIL
 
+# 👥 Team Contributions
+
+## Angel George
+- Dataset preprocessing
+- Feature extraction assistance
+- Documentation support
+
+## Vishnumaya
+- EDA and model development
+- Streamlit app deployment
+- PPT preparation
+
+## Anagha C
+- Coin segmentation
+- Result analysis
+- Report preparation
 
 # ✅ Conclusion
 

@@ -13,9 +13,9 @@ from skimage.feature import hog
 # LOAD MODEL
 # =========================================================
 
-model = joblib.load("C:\\Angel\\coin\\coin_model.pkl")
+model = joblib.load("models/rf_model.pkl")
 
-scaler = joblib.load("C:\\Angel\\coin\\scaler.pkl")
+scaler = joblib.load("models/scaler.pkl")
 
 
 # =========================================================

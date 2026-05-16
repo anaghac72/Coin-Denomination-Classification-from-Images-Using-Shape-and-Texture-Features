@@ -26,33 +26,94 @@ st.set_page_config(
 st.markdown("""
 <style>
 
-.title {
-    text-align: center;
-    font-size: 50px;
-    font-weight: bold;
-    color: #111111;
+/* Main App */
+
+.main {
+    padding-top: 1rem;
 }
+
+/* Title */
+
+.title {
+
+    text-align: center;
+
+    font-size: 62px;
+
+    font-weight: 900;
+
+    margin-bottom: 8px;
+
+    color: inherit;
+}
+
+/* Subtitle */
 
 .subtitle {
+
     text-align: center;
-    font-size: 18px;
-    color: gray;
-    margin-bottom: 30px;
+
+    font-size: 22px;
+
+    margin-bottom: 35px;
+
+    color: #808080;
 }
+
+/* Result Box */
 
 .result-box {
-    background-color: #f5f7fa;
-    padding: 25px;
-    border-radius: 15px;
+
+    padding: 28px;
+
+    border-radius: 18px;
+
     text-align: center;
+
     margin-top: 20px;
-    box-shadow: 0px 4px 10px rgba(0,0,0,0.08);
+
+    background-color: rgba(120,120,120,0.08);
+
+    border: 1px solid rgba(120,120,120,0.15);
+
+    backdrop-filter: blur(8px);
 }
 
+/* Result */
+
 .result {
-    font-size: 42px;
-    font-weight: bold;
-    color: #00875a;
+
+    font-size: 52px;
+
+    font-weight: 800;
+
+    color: #00a86b;
+}
+
+/* Confidence */
+
+.confidence {
+
+    margin-top: 12px;
+
+    font-size: 20px;
+
+    font-weight: 500;
+
+    color: inherit;
+}
+
+/* Footer */
+
+.footer {
+
+    text-align: center;
+
+    margin-top: 50px;
+
+    font-size: 15px;
+
+    color: gray;
 }
 
 </style>
@@ -93,13 +154,13 @@ def extract_features(image):
     # PIL -> NumPy
     image = np.array(image)
 
-    # Resize image
+    # Resize
     image = cv2.resize(image, (256, 256))
 
     # RGB -> BGR
     image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
 
-    # Gray image
+    # Grayscale
     gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
 
     # =====================================================
@@ -222,7 +283,7 @@ def extract_features(image):
 
 
 # =========================================================
-# UI
+# TITLE
 # =========================================================
 
 st.markdown(
@@ -235,10 +296,16 @@ st.markdown(
     unsafe_allow_html=True
 )
 
+
+# =========================================================
+# FILE UPLOADER
+# =========================================================
+
 uploaded_file = st.file_uploader(
     "Upload Coin Image",
     type=["jpg", "jpeg", "png"]
 )
+
 
 # =========================================================
 # PREDICTION
@@ -260,12 +327,12 @@ if uploaded_file is not None:
                 use_container_width=True
             )
 
-        with st.spinner("Predicting..."):
+        with st.spinner("Predicting denomination..."):
 
-            # Extract features
+            # Extract Features
             features = extract_features(image)
 
-            # Scale
+            # Scale Features
             features = scaler.transform([features])
 
             # Predict
@@ -288,8 +355,9 @@ if uploaded_file is not None:
                 f"""
                 <div class="result-box">
                     <div class="result">₹{prediction}</div>
-                    <br>
-                    <b>Confidence:</b> {confidence:.2f}%
+                    <div class="confidence">
+                        Confidence: {confidence:.2f}%
+                    </div>
                 </div>
                 """,
                 unsafe_allow_html=True
@@ -298,3 +366,15 @@ if uploaded_file is not None:
     except Exception as e:
 
         st.error(f"Prediction failed: {e}")
+
+
+# =========================================================
+# FOOTER
+# =========================================================
+
+st.markdown("---")
+
+st.markdown(
+    '<p class="footer">Built with Streamlit + OpenCV + Random Forest</p>',
+    unsafe_allow_html=True
+)

@@ -20,6 +20,72 @@ st.set_page_config(
 
 
 # =========================================================
+# CUSTOM CSS
+# =========================================================
+
+st.markdown("""
+<style>
+
+/* Main */
+
+.block-container {
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+}
+
+/* Title */
+
+.title {
+
+    font-size: 54px;
+
+    font-weight: 800;
+
+    margin-bottom: 10px;
+}
+
+/* Subtitle */
+
+.subtitle {
+
+    font-size: 22px;
+
+    color: gray;
+
+    margin-bottom: 30px;
+}
+
+/* Result Card */
+
+.result-card {
+
+    background-color: rgba(0, 128, 0, 0.15);
+
+    padding: 22px;
+
+    border-radius: 14px;
+
+    margin-top: 25px;
+
+    border: 1px solid rgba(0,255,0,0.2);
+}
+
+/* Result Text */
+
+.result-text {
+
+    font-size: 28px;
+
+    font-weight: 700;
+
+    color: #22c55e;
+}
+
+</style>
+""", unsafe_allow_html=True)
+
+
+# =========================================================
 # LOAD MODEL
 # =========================================================
 
@@ -50,16 +116,12 @@ except Exception as e:
 
 def extract_features(image):
 
-    # PIL -> NumPy
     image = np.array(image)
 
-    # Resize
     image = cv2.resize(image, (256, 256))
 
-    # RGB -> BGR
     image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
 
-    # Grayscale
     gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
 
     # =====================================================
@@ -147,7 +209,6 @@ def extract_features(image):
         feature_vector=True
     )
 
-    # MUST MATCH TRAINING
     hog_features = hog_features[:200]
 
     # =====================================================
@@ -185,25 +246,15 @@ def extract_features(image):
 # TITLE
 # =========================================================
 
-st.markdown("""
-<h1 style='
-font-size: 52px;
-font-weight: 800;
-margin-bottom: 5px;
-'>
-🪙 Indian Coin Denomination Prediction
-</h1>
-""", unsafe_allow_html=True)
+st.markdown(
+    '<div class="title">🪙 Indian Coin Denomination Prediction</div>',
+    unsafe_allow_html=True
+)
 
-st.markdown("""
-<p style='
-font-size: 22px;
-color: gray;
-margin-bottom: 25px;
-'>
-Upload an Indian coin image to predict the denomination.
-</p>
-""", unsafe_allow_html=True)
+st.markdown(
+    '<div class="subtitle">Upload an Indian coin image to predict the denomination.</div>',
+    unsafe_allow_html=True
+)
 
 
 # =========================================================
@@ -234,17 +285,21 @@ if uploaded_file is not None:
 
         with st.spinner("Predicting denomination..."):
 
-            # Extract Features
             features = extract_features(image)
 
-            # Scale Features
             features = scaler.transform([features])
 
-            # Predict
             prediction = model.predict(features)[0]
 
-        st.success(
-            f"Predicted Coin Denomination: ₹{prediction}"
+        st.markdown(
+            f"""
+            <div class="result-card">
+                <div class="result-text">
+                    Predicted Coin Denomination: ₹{prediction}
+                </div>
+            </div>
+            """,
+            unsafe_allow_html=True
         )
 
     except Exception as e:

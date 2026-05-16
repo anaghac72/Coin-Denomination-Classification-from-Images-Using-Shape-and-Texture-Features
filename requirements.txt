@@ -7,3 +7,4 @@ seaborn
 streamlit
 Pillow
 scipy
+opencv-python-headless

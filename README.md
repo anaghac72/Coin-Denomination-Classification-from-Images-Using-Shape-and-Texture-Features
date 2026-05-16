@@ -6,7 +6,7 @@ This project focuses on classifying Indian coin denominations (₹1, ₹2, ₹5,
 |Name|Course|RegNo|
 |----|------|----|
 |Angel George|BioAI||
-|Vishnumaya|CSDA||253013|
+|Vishnumaya|CSDA|253013|
 |Anagha C|DACS|253126|
 ## Dataset 
 - Source: Kaggle (Indian Coin Denomination Dataset (ICDD)) 

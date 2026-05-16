@@ -144,33 +144,31 @@ Upload any Indian coin image (`JPG`, `PNG`) and get instant denomination predict
 
 ## ₹1 Coin Prediction
 
-<img src="deployment_results/coin1.png" width="400">
+<img src="deployment_results/coin 1.png" width="400">
 
 ---
 
 ## ₹2 Coin Prediction
 
-<img src="deployment_results/coin2.png" width="400">
+<img src="deployment_results/coin 2.png" width="400">
 
 ---
 
 ## ₹5 Coin Prediction
 
-<img src="deployment_results/coin5.png" width="400">
+<img src="deployment_results/coin 5.png" width="400">
 
 ---
 
 ## ₹10 Coin Prediction
 
-<img src="deployment_results/coin10.png" width="400">
+<img src="deployment_results/coin 10.png" width="400">
 
 ---
 
 ## ₹20 Coin Prediction
 
-<img src="deployment_results/coin20.png" width="400">
-
----
+<img src="deployment_results/coin 20.png" width="400">
 
 # ⚠️ Limitations
 

@@ -13,3 +13,28 @@ This project focuses on classifying Indian coin denominations (₹1, ₹2, ₹5,
 
 ##Problem Definition
 This project classifies Indian coin denominations (₹1, ₹2, ₹5, ₹10, ₹20) from photographs using classical machine learning — no deep learning. Features are extracted using shape, texture, and color descriptors after segmenting the coin via Circular Hough Transform. The system is designed to work across worn, new, and differently-lit coin images.
+# Features
+# Image Preprocessing
+- Image resizing and normalization
+- Noise reduction using Gaussian Blur
+- Coin segmentation using Circular Hough Transform
+- Background removal
+  Feature Extraction
+
+# The following handcrafted features are extracted from each segmented coin image:
+
+1. Diameter Ratio
+- Measures normalized coin size
+- Useful for differentiating denominations with different physical dimensions
+2. Edge Density
+- Calculated using Canny Edge Detection
+- Captures relief complexity and engraving density
+3. Local Binary Pattern (LBP)
+- Extracts surface texture patterns
+- Helps identify coin embossing and fine textures
+4. Histogram of Oriented Gradients (HOG)
+- Captures edge orientation and structural details
+- Useful for identifying denomination-specific designs
+5. HSV Color Histogram
+- Differentiates coins based on metal color
+- Helps separate silver-toned and bi-metallic coins

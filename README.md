@@ -5,7 +5,7 @@ This project focuses on classifying Indian coin denominations (₹1, ₹2, ₹5,
 ## Team Members
 |Name|Course|RegNo|
 |----|------|----|
-|Angel George|BioAI||
+|Angel George|BioAI|253203|
 |Vishnumaya|CSDA|253013|
 |Anagha C|DACS|253126|
 ## Dataset 

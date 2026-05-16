@@ -4,18 +4,43 @@ import joblib
 import numpy as np
 
 from PIL import Image
-
 from skimage.feature import local_binary_pattern
 from skimage.feature import hog
+
+
+# =========================================================
+# PAGE CONFIG
+# =========================================================
+
+st.set_page_config(
+    page_title="Indian Coin Prediction",
+    page_icon="🪙",
+    layout="centered"
+)
 
 
 # =========================================================
 # LOAD MODEL
 # =========================================================
 
-model = joblib.load("models/rf_model.pkl")
+@st.cache_resource
+def load_models():
 
-scaler = joblib.load("models/scaler.pkl")
+    model = joblib.load("rf_model.pkl")
+
+    scaler = joblib.load("scaler.pkl")
+
+    return model, scaler
+
+
+try:
+    model, scaler = load_models()
+
+except Exception as e:
+
+    st.error(f"Error loading model files: {e}")
+
+    st.stop()
 
 
 # =========================================================
@@ -32,6 +57,7 @@ def extract_features(image):
 
     gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
 
+    # Detect coin circle
     circles = cv2.HoughCircles(
         gray,
         cv2.HOUGH_GRADIENT,
@@ -62,15 +88,24 @@ def extract_features(image):
     else:
         segmented = gray
 
-    # Diameter ratio
+    # =====================================================
+    # Diameter Ratio
+    # =====================================================
+
     diameter_ratio = radius / 128.0
 
-    # Edge density
+    # =====================================================
+    # Edge Density
+    # =====================================================
+
     edges = cv2.Canny(segmented, 100, 200)
 
     edge_density = np.sum(edges > 0) / (256 * 256)
 
-    # LBP
+    # =====================================================
+    # LBP FEATURES
+    # =====================================================
+
     radius_lbp = 3
 
     points = 8 * radius_lbp
@@ -92,7 +127,10 @@ def extract_features(image):
 
     lbp_hist /= (lbp_hist.sum() + 1e-6)
 
-    # HOG
+    # =====================================================
+    # HOG FEATURES
+    # =====================================================
+
     hog_features = hog(
         segmented,
         orientations=9,
@@ -104,7 +142,10 @@ def extract_features(image):
 
     hog_features = hog_features[:200]
 
-    # HSV histogram
+    # =====================================================
+    # HSV HISTOGRAM
+    # =====================================================
+
     hsv = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
 
     hist = cv2.calcHist(
@@ -116,6 +157,10 @@ def extract_features(image):
     )
 
     hist = cv2.normalize(hist, hist).flatten()
+
+    # =====================================================
+    # FINAL FEATURE VECTOR
+    # =====================================================
 
     features = np.hstack([
         diameter_ratio,
@@ -132,11 +177,10 @@ def extract_features(image):
 # STREAMLIT UI
 # =========================================================
 
-st.title("Indian Coin Denomination Prediction")
+st.title("🪙 Indian Coin Denomination Prediction")
 
 st.write(
-    "Upload an Indian coin image "
-    "to predict the denomination."
+    "Upload an Indian coin image to predict the denomination."
 )
 
 uploaded_file = st.file_uploader(
@@ -146,20 +190,28 @@ uploaded_file = st.file_uploader(
 
 if uploaded_file is not None:
 
-    image = Image.open(uploaded_file)
+    try:
 
-    st.image(
-        image,
-        caption="Uploaded Coin",
-        use_container_width=True
-    )
+        image = Image.open(uploaded_file).convert("RGB")
 
-    features = extract_features(image)
+        st.image(
+            image,
+            caption="Uploaded Coin",
+            use_container_width=True
+        )
 
-    features = scaler.transform([features])
+        with st.spinner("Predicting..."):
 
-    prediction = model.predict(features)[0]
+            features = extract_features(image)
 
-    st.success(
-        f"Predicted Coin Denomination: ₹{prediction}"
-    )
+            features = scaler.transform([features])
+
+            prediction = model.predict(features)[0]
+
+        st.success(
+            f"Predicted Coin Denomination: ₹{prediction}"
+        )
+
+    except Exception as e:
+
+        st.error(f"Prediction failed: {e}")

@@ -41,3 +41,5 @@ This project classifies Indian coin denominations (₹1, ₹2, ₹5, ₹10, ₹2
 5. HSV Color Histogram
 - Differentiates coins based on metal color
 - Helps separate silver-toned and bi-metallic coins
+## Streamlit App Link
+https://coin-denomination-classification.streamlit.app/

@@ -32,34 +32,6 @@ st.markdown("""
     padding-top: 1rem;
 }
 
-/* Title */
-
-.title {
-
-    text-align: center;
-
-    font-size: 62px;
-
-    font-weight: 900;
-
-    margin-bottom: 8px;
-
-    color: inherit;
-}
-
-/* Subtitle */
-
-.subtitle {
-
-    text-align: center;
-
-    font-size: 22px;
-
-    margin-bottom: 35px;
-
-    color: #808080;
-}
-
 /* Result Box */
 
 .result-box {
@@ -286,15 +258,27 @@ def extract_features(image):
 # TITLE
 # =========================================================
 
-st.markdown(
-    '<p class="title">🪙 Indian Coin Prediction</p>',
-    unsafe_allow_html=True
-)
+st.markdown("""
+<h1 style='
+text-align: center;
+font-size: 70px;
+font-weight: 900;
+margin-bottom: 10px;
+'>
+🪙 Indian Coin Prediction
+</h1>
+""", unsafe_allow_html=True)
 
-st.markdown(
-    '<p class="subtitle">Upload an Indian coin image to predict denomination</p>',
-    unsafe_allow_html=True
-)
+st.markdown("""
+<p style='
+text-align: center;
+font-size: 24px;
+color: gray;
+margin-bottom: 40px;
+'>
+Upload an Indian coin image to predict denomination
+</p>
+""", unsafe_allow_html=True)
 
 
 # =========================================================

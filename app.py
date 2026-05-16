@@ -13,83 +13,10 @@ from skimage.feature import hog
 # =========================================================
 
 st.set_page_config(
-    page_title="Indian Coin Prediction",
+    page_title="Indian Coin Denomination Prediction",
     page_icon="🪙",
     layout="centered"
 )
-
-
-# =========================================================
-# CUSTOM CSS
-# =========================================================
-
-st.markdown("""
-<style>
-
-/* Main App */
-
-.main {
-    padding-top: 1rem;
-}
-
-/* Result Box */
-
-.result-box {
-
-    padding: 28px;
-
-    border-radius: 18px;
-
-    text-align: center;
-
-    margin-top: 20px;
-
-    background-color: rgba(120,120,120,0.08);
-
-    border: 1px solid rgba(120,120,120,0.15);
-
-    backdrop-filter: blur(8px);
-}
-
-/* Result */
-
-.result {
-
-    font-size: 52px;
-
-    font-weight: 800;
-
-    color: #00a86b;
-}
-
-/* Confidence */
-
-.confidence {
-
-    margin-top: 12px;
-
-    font-size: 20px;
-
-    font-weight: 500;
-
-    color: inherit;
-}
-
-/* Footer */
-
-.footer {
-
-    text-align: center;
-
-    margin-top: 50px;
-
-    font-size: 15px;
-
-    color: gray;
-}
-
-</style>
-""", unsafe_allow_html=True)
 
 
 # =========================================================
@@ -260,23 +187,21 @@ def extract_features(image):
 
 st.markdown("""
 <h1 style='
-text-align: center;
-font-size: 70px;
-font-weight: 900;
-margin-bottom: 10px;
+font-size: 52px;
+font-weight: 800;
+margin-bottom: 5px;
 '>
-🪙 Indian Coin Prediction
+🪙 Indian Coin Denomination Prediction
 </h1>
 """, unsafe_allow_html=True)
 
 st.markdown("""
 <p style='
-text-align: center;
-font-size: 24px;
+font-size: 22px;
 color: gray;
-margin-bottom: 40px;
+margin-bottom: 25px;
 '>
-Upload an Indian coin image to predict denomination
+Upload an Indian coin image to predict the denomination.
 </p>
 """, unsafe_allow_html=True)
 
@@ -301,15 +226,11 @@ if uploaded_file is not None:
 
         image = Image.open(uploaded_file).convert("RGB")
 
-        col1, col2 = st.columns(2)
-
-        with col1:
-
-            st.image(
-                image,
-                caption="Uploaded Coin",
-                use_container_width=True
-            )
+        st.image(
+            image,
+            caption="Uploaded Coin",
+            use_container_width=True
+        )
 
         with st.spinner("Predicting denomination..."):
 
@@ -322,43 +243,10 @@ if uploaded_file is not None:
             # Predict
             prediction = model.predict(features)[0]
 
-            # Confidence
-            if hasattr(model, "predict_proba"):
-
-                confidence = np.max(
-                    model.predict_proba(features)
-                ) * 100
-
-            else:
-
-                confidence = 0
-
-        with col2:
-
-            st.markdown(
-                f"""
-                <div class="result-box">
-                    <div class="result">₹{prediction}</div>
-                    <div class="confidence">
-                        Confidence: {confidence:.2f}%
-                    </div>
-                </div>
-                """,
-                unsafe_allow_html=True
-            )
+        st.success(
+            f"Predicted Coin Denomination: ₹{prediction}"
+        )
 
     except Exception as e:
 
         st.error(f"Prediction failed: {e}")
-
-
-# =========================================================
-# FOOTER
-# =========================================================
-
-st.markdown("---")
-
-st.markdown(
-    '<p class="footer">Built with Streamlit + OpenCV + Random Forest</p>',
-    unsafe_allow_html=True
-)

@@ -13,7 +13,7 @@ from skimage.feature import hog
 # LOAD MODEL
 # =========================================================
 
-model = joblib.load("models/knn.pkl")
+model = joblib.load("models/rf_model.pkl")
 
 scaler = joblib.load("models/scaler.pkl")
 

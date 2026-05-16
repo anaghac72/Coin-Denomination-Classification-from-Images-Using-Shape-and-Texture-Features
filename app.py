@@ -13,10 +13,76 @@ from skimage.feature import hog
 # =========================================================
 
 st.set_page_config(
-    page_title="Indian Coin Prediction",
+    page_title="Indian Coin Denomination Prediction",
     page_icon="🪙",
     layout="centered"
 )
+
+
+# =========================================================
+# CUSTOM CSS
+# =========================================================
+
+st.markdown("""
+<style>
+
+/* Main */
+
+.block-container {
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+}
+
+/* Title */
+
+.title {
+
+    font-size: 54px;
+
+    font-weight: 800;
+
+    margin-bottom: 10px;
+}
+
+/* Subtitle */
+
+.subtitle {
+
+    font-size: 22px;
+
+    color: gray;
+
+    margin-bottom: 30px;
+}
+
+/* Result Card */
+
+.result-card {
+
+    background-color: rgba(0, 128, 0, 0.15);
+
+    padding: 22px;
+
+    border-radius: 14px;
+
+    margin-top: 25px;
+
+    border: 1px solid rgba(0,255,0,0.2);
+}
+
+/* Result Text */
+
+.result-text {
+
+    font-size: 28px;
+
+    font-weight: 700;
+
+    color: #22c55e;
+}
+
+</style>
+""", unsafe_allow_html=True)
 
 
 # =========================================================
@@ -26,14 +92,15 @@ st.set_page_config(
 @st.cache_resource
 def load_models():
 
-    model = joblib.load("rf_model.pkl")
+    model = joblib.load("models/rf_model.pkl")
 
-    scaler = joblib.load("scaler.pkl")
+    scaler = joblib.load("models/scaler.pkl")
 
     return model, scaler
 
 
 try:
+
     model, scaler = load_models()
 
 except Exception as e:
@@ -51,13 +118,16 @@ def extract_features(image):
 
     image = np.array(image)
 
-    image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
-
     image = cv2.resize(image, (256, 256))
+
+    image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
 
     gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
 
-    # Detect coin circle
+    # =====================================================
+    # CIRCLE DETECTION
+    # =====================================================
+
     circles = cv2.HoughCircles(
         gray,
         cv2.HOUGH_GRADIENT,
@@ -70,6 +140,8 @@ def extract_features(image):
     )
 
     radius = 0
+
+    segmented = gray
 
     if circles is not None:
 
@@ -85,17 +157,14 @@ def extract_features(image):
 
         segmented = cv2.bitwise_and(gray, gray, mask=mask)
 
-    else:
-        segmented = gray
-
     # =====================================================
-    # Diameter Ratio
+    # DIAMETER RATIO
     # =====================================================
 
     diameter_ratio = radius / 128.0
 
     # =====================================================
-    # Edge Density
+    # EDGE DENSITY
     # =====================================================
 
     edges = cv2.Canny(segmented, 100, 200)
@@ -174,19 +243,33 @@ def extract_features(image):
 
 
 # =========================================================
-# STREAMLIT UI
+# TITLE
 # =========================================================
 
-st.title("🪙 Indian Coin Denomination Prediction")
-
-st.write(
-    "Upload an Indian coin image to predict the denomination."
+st.markdown(
+    '<div class="title">🪙 Indian Coin Denomination Prediction</div>',
+    unsafe_allow_html=True
 )
+
+st.markdown(
+    '<div class="subtitle">Upload an Indian coin image to predict the denomination.</div>',
+    unsafe_allow_html=True
+)
+
+
+# =========================================================
+# FILE UPLOADER
+# =========================================================
 
 uploaded_file = st.file_uploader(
     "Upload Coin Image",
     type=["jpg", "jpeg", "png"]
 )
+
+
+# =========================================================
+# PREDICTION
+# =========================================================
 
 if uploaded_file is not None:
 
@@ -200,7 +283,7 @@ if uploaded_file is not None:
             use_container_width=True
         )
 
-        with st.spinner("Predicting..."):
+        with st.spinner("Predicting denomination..."):
 
             features = extract_features(image)
 
@@ -208,8 +291,15 @@ if uploaded_file is not None:
 
             prediction = model.predict(features)[0]
 
-        st.success(
-            f"Predicted Coin Denomination: ₹{prediction}"
+        st.markdown(
+            f"""
+            <div class="result-card">
+                <div class="result-text">
+                    Predicted Coin Denomination: ₹{prediction}
+                </div>
+            </div>
+            """,
+            unsafe_allow_html=True
         )
 
     except Exception as e:

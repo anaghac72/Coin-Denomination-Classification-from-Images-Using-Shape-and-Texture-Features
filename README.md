@@ -133,13 +133,13 @@ https://www.kaggle.com/datasets/lazrus/indian-coin-denomination-dataset-icdd
 
 # 🌐 Live Demo
 
-🚀 Streamlit Application:
+🚀 Try the deployed Streamlit application here:
 
-[🔗 Indian Coin Denomination Classification App](https://coin-denomination-classification.streamlit.app/)
+[🪙 Indian Coin Denomination Classification App](https://coin-denomination-classification.streamlit.app/)
 
-Upload any Indian coin image (`JPG`, `PNG`) and get instant denomination prediction using the deployed Random Forest model.
+Upload an Indian coin image (`JPG`, `JPEG`, `PNG`) to predict its denomination using the trained Random Forest model.
+
 ---
-
 # 📸 Deployment Results
 
 ## ₹1 Coin Prediction
@@ -210,22 +210,6 @@ Upload any Indian coin image (`JPG`, `PNG`) and get instant denomination predict
 - Scikit-Image
 - PIL
 
-# 👥 Team Contributions
-
-## Angel George
-- Dataset preprocessing
-- Feature extraction assistance
-- Documentation support
-
-## Vishnumaya
-- EDA and model development
-- Streamlit app deployment
-- PPT preparation
-
-## Anagha C
-- Coin segmentation
-- Result analysis
-- Report preparation
 
 # ✅ Conclusion
 

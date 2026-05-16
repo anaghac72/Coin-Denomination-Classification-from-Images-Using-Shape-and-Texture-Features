@@ -6,3 +6,6 @@ This project focuses on classifying Indian coin denominations (₹1, ₹2, ₹5,
 1. Angel George 
 2. Vishnumaya
 3. Anagha C
+## Dataset 
+Source - Kaggle (Indian Coin Denomination Dataset (ICDD))
+Contains ₹1, ₹2, ₹5, ₹10, and ₹20 coin images with different lighting conditions and viewing angles.

@@ -5,8 +5,8 @@ This project focuses on classifying Indian coin denominations (₹1, ₹2, ₹5,
 ## Team Members
 |Name|Course|RegNo|
 |----|------|----|
-|Angel George|BioAI||
-|Vishnumaya|CSDA||253013|
+|Angel George|BioAI|253203|
+|Vishnumaya|CSDA|253013|
 |Anagha C|DACS|253126|
 ## Dataset 
 - Source: Kaggle (Indian Coin Denomination Dataset (ICDD)) 
@@ -41,5 +41,9 @@ This project classifies Indian coin denominations (₹1, ₹2, ₹5, ₹10, ₹2
 5. HSV Color Histogram
 - Differentiates coins based on metal color
 - Helps separate silver-toned and bi-metallic coins
+  # Machine Learning Models
+  - SVM
+  - KNN
+  - Random Forest
 ## Streamlit App Link
 https://coin-denomination-classification.streamlit.app/

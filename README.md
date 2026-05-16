@@ -210,22 +210,6 @@ Upload any Indian coin image (`JPG`, `PNG`) and get instant denomination predict
 - Scikit-Image
 - PIL
 
-# 👥 Team Contributions
-
-## Angel George
-- Dataset preprocessing
-- Feature extraction assistance
-- Documentation support
-
-## Vishnumaya
-- EDA and model development
-- Streamlit app deployment
-- PPT preparation
-
-## Anagha C
-- Coin segmentation
-- Result analysis
-- Report preparation
 
 # ✅ Conclusion
 
